@@ -1,5 +1,6 @@
 package com.project.bookstore.user.entity;
 
+import com.project.bookstore.auditable.Auditable;
 import com.project.bookstore.book.entity.Book;
 import com.project.bookstore.user.enums.Gender;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class User {
+public class User extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

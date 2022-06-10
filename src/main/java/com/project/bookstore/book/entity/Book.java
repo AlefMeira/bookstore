@@ -1,5 +1,6 @@
 package com.project.bookstore.book.entity;
 
+import com.project.bookstore.auditable.Auditable;
 import com.project.bookstore.author.entity.Author;
 import com.project.bookstore.publisher.entity.Publisher;
 import com.project.bookstore.user.entity.User;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Book {
+public class Book extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
