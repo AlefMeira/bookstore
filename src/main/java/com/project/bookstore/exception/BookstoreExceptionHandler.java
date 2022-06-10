@@ -58,7 +58,8 @@ public class BookstoreExceptionHandler extends ResponseEntityExceptionHandler {
                 Collections.singletonList(exception.getMessage()));
     }
 
-    private ResponseEntity<Object> buildResponseEntity(final HttpStatus httpStatus, final String message, final List<String> errors) {
+    private ResponseEntity<Object> buildResponseEntity(final HttpStatus httpStatus, final String message,
+                                                       final List<String> errors) {
         final ApiError apiError = ApiError.builder()
                 .code(httpStatus.value())
                 .status(httpStatus.getReasonPhrase())
