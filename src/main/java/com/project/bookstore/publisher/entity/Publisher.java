@@ -1,5 +1,6 @@
 package com.project.bookstore.publisher.entity;
 
+import com.project.bookstore.auditable.Auditable;
 import com.project.bookstore.book.entity.Book;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Publisher {
+public class Publisher extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
