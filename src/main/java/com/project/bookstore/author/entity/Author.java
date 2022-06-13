@@ -11,10 +11,11 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
+@Table(name = "author")
 public class Author extends Auditable {
 
     @Id
