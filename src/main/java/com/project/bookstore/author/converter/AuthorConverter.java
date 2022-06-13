@@ -9,19 +9,19 @@ public class AuthorConverter {
         throw new IllegalStateException("utility class");
     }
 
-    public static Author authorToAuthorDTO(final AuthorDTO authorDTO) {
-        return Author.builder()
-                .id(authorDTO.getId())
-                .name(authorDTO.getName())
-                .age(authorDTO.getAge())
-                .build();
-    }
-
-    public static AuthorDTO authorDTOToAuthor(final Author author) {
+    public static AuthorDTO authorToAuthorDTO(final Author author) {
         return AuthorDTO.builder()
                 .id(author.getId())
                 .name(author.getName())
                 .age(author.getAge())
+                .build();
+    }
+
+    public static Author authorDTOToAuthor(final AuthorDTO authorDTO) {
+        return Author.builder()
+                .id(authorDTO.getId())
+                .name(authorDTO.getName())
+                .age(authorDTO.getAge())
                 .build();
     }
 }
