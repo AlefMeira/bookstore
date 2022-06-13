@@ -11,5 +11,4 @@ public class AuthorDTOFixture {
                 .age(65)
                 .build();
     }
-
 }
