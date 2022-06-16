@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+import java.util.List;
+
 @Api("Authors management")
 public interface AuthorControllerDocs {
 
@@ -17,4 +19,12 @@ public interface AuthorControllerDocs {
                     "registry in the system")
     })
     AuthorDTO create(final AuthorDTO authorDTO) throws AuthorAlreadyExistException;
+
+
+    @ApiOperation("List all registered authors")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Returned all registered authors")
+    })
+    List<AuthorDTO> list();
+
 }

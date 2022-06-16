@@ -19,10 +19,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Test for author controller
@@ -61,10 +64,10 @@ public class AuthorControllerTest {
 
         //THEN
         this.mvc.perform(requestBuilder)
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Is.is(expectedCreateAuthorDTO.getId().intValue())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Is.is(expectedCreateAuthorDTO.getName())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.age", Is.is(expectedCreateAuthorDTO.getAge())));
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", Is.is(expectedCreateAuthorDTO.getId().intValue())))
+                .andExpect(jsonPath("$.name", Is.is(expectedCreateAuthorDTO.getName())))
+                .andExpect(jsonPath("$.age", Is.is(expectedCreateAuthorDTO.getAge())));
 
         verify(this.authorService).create(expectedCreateAuthorDTO);
     }
@@ -85,8 +88,29 @@ public class AuthorControllerTest {
                 .content(this.asJsonString(expectedCreateAuthorDTO));
 
         //THEN
-        this.mvc.perform(requestBuilder).andExpect(MockMvcResultMatchers.status().isBadRequest());
+        this.mvc.perform(requestBuilder).andExpect(status().isBadRequest());
         verify(this.authorService, never()).create(any());
+    }
+
+    @Test
+    void whenGETListIsCalledWhenStatusSuccessShouldBeReturned() throws Exception {
+        //Given
+        final var expectedAuthorDTO = AuthorDTOFixture.authorDTO();
+
+        //When
+        when(this.authorService.list()).thenReturn(Collections.singletonList(expectedAuthorDTO));
+
+        final MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get(AUTHOR_URI)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(this.asJsonString(expectedAuthorDTO));
+
+        this.mvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", Is.is(expectedAuthorDTO.getId().intValue())))
+                .andExpect(jsonPath("$[0].name", Is.is(expectedAuthorDTO.getName())))
+                .andExpect(jsonPath("$[0].age", Is.is(expectedAuthorDTO.getAge())));
     }
 
     private String asJsonString(final AuthorDTO expectedCreateAuthorDTO) throws JsonProcessingException {

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/authors")
@@ -20,5 +21,12 @@ public class AuthorController implements AuthorControllerDocs {
     @ResponseStatus(HttpStatus.CREATED)
     public AuthorDTO create(@RequestBody @Valid final AuthorDTO authorDTO) {
         return this.authorService.create(authorDTO);
+    }
+
+    @Override
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<AuthorDTO> list() {
+        return this.authorService.list();
     }
 }
