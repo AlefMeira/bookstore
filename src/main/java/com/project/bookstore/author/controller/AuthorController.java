@@ -1,7 +1,6 @@
 package com.project.bookstore.author.controller;
 
 import com.project.bookstore.author.dto.AuthorDTO;
-import com.project.bookstore.author.exception.AuthorAlreadyExistException;
 import com.project.bookstore.author.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,7 @@ public class AuthorController implements AuthorControllerDocs {
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AuthorDTO create(@RequestBody @Valid final AuthorDTO authorDTO) throws AuthorAlreadyExistException {
+    public AuthorDTO create(@RequestBody @Valid final AuthorDTO authorDTO) {
         return this.authorService.create(authorDTO);
     }
 }
