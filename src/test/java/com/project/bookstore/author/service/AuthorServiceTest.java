@@ -122,8 +122,8 @@ public class AuthorServiceTest {
         final var authorToBeDeleted = AuthorConverter.authorDTOToAuthor(expectedDeleteAuthorDto);
 
         final var expectedAuthorId = authorToBeDeleted.getId();
-        when(authorRepository.findById(1L)).thenReturn(Optional.of(authorToBeDeleted));
-        doNothing().when(authorRepository).deleteById(expectedAuthorId);
+        when(this.authorRepository.findById(1L)).thenReturn(Optional.of(authorToBeDeleted));
+        doNothing().when(this.authorRepository).deleteById(expectedAuthorId);
 
         //When
         this.authorService.delete(expectedAuthorId);
@@ -136,25 +136,8 @@ public class AuthorServiceTest {
     @Test
     void whenInvalidAuthorIdIsGivenThenAnExceptionShouldBeThrown() {
         //When
-        when(authorRepository.findById(any())).thenReturn(Optional.empty());
+        when(this.authorRepository.findById(any())).thenReturn(Optional.empty());
         //Then
-        assertThrows(AuthorNotFoundException.class, ()-> authorService.delete(any()));
+        assertThrows(AuthorNotFoundException.class, () -> this.authorService.delete(any()));
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
