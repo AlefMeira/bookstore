@@ -1,10 +1,12 @@
 package com.project.bookstore.author.service;
 
+import com.project.bookstore.author.converter.AuthorConverter;
 import com.project.bookstore.author.entity.Author;
 import com.project.bookstore.author.exception.AuthorAlreadyExistException;
-import com.project.bookstore.author.fixture.AuthorDTOFixture;
+import com.project.bookstore.author.exception.AuthorNotFoundException;
 import com.project.bookstore.author.repository.AuthorRepository;
 import org.hamcrest.core.Is;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,7 +60,7 @@ public class AuthorServiceTest {
     @DisplayName("When an existing author is informed then there should be an error returned")
     void whenExistsAuthorIsInformedThenAnExceptionShouldBeThrown() {
         //GIVEN
-        final var expectedAuthorCreatedDTO = AuthorDTOFixture.authorDTO();
+        final var expectedAuthorCreatedDTO = authorDTO();
         //WHEN
         when(this.authorRepository.findByName(expectedAuthorCreatedDTO.getName()))
                 .thenReturn(Optional.of(new Author()));
@@ -97,4 +99,62 @@ public class AuthorServiceTest {
 
         assertThat(authorDTOList.size(), Is.is(0));
     }
+
+    @Test
+    void WhenValidIdIsInformedThenAnAuthorShouldBeReturned() {
+        //Given
+        final var expectedAuthorDTO = authorDTO();
+        final var expectedAuthor = authorDTOToAuthor(expectedAuthorDTO);
+        when(this.authorRepository.findById(1L)).thenReturn(Optional.of(expectedAuthor));
+
+        //When
+        final var result = this.authorService.findById(1L);
+
+        //Then
+        Assertions.assertEquals(expectedAuthorDTO.getId(), result.get().getId());
+        Assertions.assertNotNull(expectedAuthor);
+    }
+
+    @Test
+    void whenValidAuthorIdIsGivenThenItShouldBeDeleted() {
+        //Given
+        final var expectedDeleteAuthorDto = authorDTO();
+        final var authorToBeDeleted = AuthorConverter.authorDTOToAuthor(expectedDeleteAuthorDto);
+
+        final var expectedAuthorId = authorToBeDeleted.getId();
+        when(authorRepository.findById(1L)).thenReturn(Optional.of(authorToBeDeleted));
+        doNothing().when(authorRepository).deleteById(expectedAuthorId);
+
+        //When
+        this.authorService.delete(expectedAuthorId);
+
+        //Then
+        verify(this.authorRepository).findById(anyLong());
+        verify(this.authorRepository).deleteById(any());
+    }
+
+    @Test
+    void whenInvalidAuthorIdIsGivenThenAnExceptionShouldBeThrown() {
+        //When
+        when(authorRepository.findById(any())).thenReturn(Optional.empty());
+        //Then
+        assertThrows(AuthorNotFoundException.class, ()-> authorService.delete(any()));
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
